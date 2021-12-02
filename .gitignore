@@ -1,10 +1,9 @@
 data
+WIP
 venv
 .idea
-WIP/aaa.dat
-WIP/aaa - Copy.csv
-WIP/color_test.py
-WIP/test.py
-WIP/time_manip.py
+Initial Data
+utils/get_data_pd.py
+utils/RF_analysis.py
 archive/ASTM_example.sublime-project
 archive/ASTM_example.sublime-workspace

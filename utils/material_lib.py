@@ -1,3 +1,7 @@
+from pathlib import Path
+import json
+import os
+
 def property_selector(material: str, k_t: str) -> list:
     """
     Get ``a, b, c`` and ``d`` values of a given material in a given
@@ -8,7 +12,6 @@ def property_selector(material: str, k_t: str) -> list:
     :return: a, b, c, d values
     """
 
-    import os
     # par_dir = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
     mat_file = os.path.join(os.getcwd(), '../lib/mat_lib.json')
     mat_lib = load_material_lib('C:\\Users\\pooya.rowghanian\\Documents\\'
@@ -26,8 +29,6 @@ def write_material_lib(data: dict,
     :param j_file: the file where the ``data`` will be written into.
     :return: Nil.
     """
-    import json
-    from pathlib import Path
 
     with open(j_file, 'w') as f:
         json.dump(data, f, sort_keys=True, indent=4)
@@ -43,7 +44,6 @@ def load_material_lib(j_file) -> dict:
     :return: a dictionary object containing the data fo the input ``j_file``.
     """
 
-    import json
     with open(j_file, 'r') as f:
         lib = json.load(f)
     return lib
@@ -63,8 +63,7 @@ def add_material_to_lib(new_mat_name: str,
     :param lib_file: the library file where the new material will be added to.
     :return: Nil.
     """
-    from pathlib import Path
-    # import os
+
     # par_dir = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
     # mat_file = os.path.join(par_dir, 'mat_lib.json')
     # mat_file = lib_file
@@ -96,7 +95,6 @@ def delete_material_from_lib(mat_to_delete: str,
 
     :return: Nil.
     """
-    from pathlib import Path
 
     cur_lib = load_material_lib(lib_file)
 
@@ -108,7 +106,6 @@ def delete_material_from_lib(mat_to_delete: str,
     else:
         print(f'"{mat_to_delete}" does not exist in "{Path(lib_file).stem}". '
               f'Nothing Deleted. Check Spelling.')
-
 
 # add_material_to_lib('test', {'no data': []}, 'mat_lib.json')
 # delete_material_from_lib('test', 'mat_lib.json')

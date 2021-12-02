@@ -1,8 +1,8 @@
-data
-WIP
+data/
+WIP/
 venv
 .idea
-Initial Data
+Initial Data/
 utils/get_data_pd.py
 utils/RF_analysis.py
 archive/ASTM_example.sublime-project

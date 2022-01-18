@@ -1,8 +1,23 @@
 import gc
+import logging
 import os
 from datetime import datetime
+from colorlog import ColoredFormatter
 
 import numpy as np
+
+logger = logging.getLogger(__name__)  # create logger
+logger.setLevel(logging.INFO)  # set logger's leve
+
+# formatter = logging.Formatter('[%(name)s %(asctime)s]: %(message)s')  # create
+# formatter
+formatter = ColoredFormatter('%(log_color)s[%(levelname)s: %(asctime)s issued'
+                             ' from %(name)s]: \n\t%(message)s%(reset)s')
+
+console_handler = logging.StreamHandler()  # create stream handler
+console_handler.setFormatter(formatter)  # assign formatter to stream handler
+
+logger.addHandler(console_handler)  # assign handler to logger
 
 
 def get_data(file_path: str,
@@ -62,8 +77,10 @@ def get_data(file_path: str,
 
             file.seek(pos, os.SEEK_SET)  # go there
             file.truncate()  # truncate from current position
-            print(f'\nWARNING: Last line of the IMU file "{file.name}" was '
-                  f'deleted due to incomplete data record.\n')
+            logger.warning(f'The Last line of the IMU file "{file.name}"'
+                           f' was deleted due to incomplete data record.')
+            # print(f'\nWARNING: Last line of the IMU file "{file.name}" was '
+            #       f'deleted due to incomplete data record.\n')
 
         data = np.loadtxt(file.name, dtype='object', usecols=use_cols)
 

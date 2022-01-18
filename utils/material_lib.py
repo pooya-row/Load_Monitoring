@@ -1,6 +1,17 @@
+import logging
 from pathlib import Path
 import json
-import os
+
+logger = logging.getLogger(__name__)  # create logger
+logger.setLevel(logging.INFO)  # set logger's leve
+
+formatter = logging.Formatter('[%(name)s]: %(message)s')  # create formatter
+
+console_handler = logging.StreamHandler()  # create stream handler
+console_handler.setFormatter(formatter)  # assign formatter to stream handler
+
+logger.addHandler(console_handler)  # assign handler to logger
+
 
 def property_selector(material: str, k_t: str) -> list:
     """
@@ -13,7 +24,7 @@ def property_selector(material: str, k_t: str) -> list:
     """
 
     # par_dir = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
-    mat_file = os.path.join(os.getcwd(), '../lib/mat_lib.json')
+    # mat_file = os.path.join(os.getcwd(), '../lib/mat_lib.json')
     mat_lib = load_material_lib('C:\\Users\\pooya.rowghanian\\Documents\\'
                                 '02.Python\\Rainflow\\mat_lib.json')
     # mat_lib = load_material_lib(mat_file)
@@ -33,7 +44,7 @@ def write_material_lib(data: dict,
     with open(j_file, 'w') as f:
         json.dump(data, f, sort_keys=True, indent=4)
 
-    return f'library was written in "{Path(j_file).stem}".'
+    logger.info(f'library was written in "{Path(j_file).stem}".')
 
 
 def load_material_lib(j_file) -> dict:
@@ -70,13 +81,14 @@ def add_material_to_lib(new_mat_name: str,
     cur_lib = load_material_lib(lib_file)
 
     if new_mat_name in cur_lib.keys():
-        print(f'"{new_mat_name}" already exists in "{Path(lib_file).stem}". '
-              f'Nothing added. Select a different name and try again.')
+        logger.info(f'"{new_mat_name}" already exists in '
+                    f'"{Path(lib_file).stem}". Nothing added. Select a '
+                    f'different name and try again.')
     else:
         cur_lib[new_mat_name] = k_t
         write_material_lib(cur_lib)
-        print(f'"{new_mat_name}" successfully added to '
-              f'"{Path(lib_file).stem}".')
+        logger.info(f'"{new_mat_name}" successfully added to '
+                    f'"{Path(lib_file).stem}".')
 
 
 def delete_material_from_lib(mat_to_delete: str,
@@ -100,12 +112,10 @@ def delete_material_from_lib(mat_to_delete: str,
 
     if mat_to_delete in cur_lib.keys():
         del cur_lib[mat_to_delete]
-        print(f'"{mat_to_delete}" as successfully deleted from '
-              f'"{Path(lib_file).stem}".')
+        logger.info(f'"{mat_to_delete}" as successfully deleted from '
+                    f'"{Path(lib_file).stem}".')
         write_material_lib(cur_lib)
     else:
-        print(f'"{mat_to_delete}" does not exist in "{Path(lib_file).stem}". '
-              f'Nothing Deleted. Check Spelling.')
-
-# add_material_to_lib('test', {'no data': []}, 'mat_lib.json')
-# delete_material_from_lib('test', 'mat_lib.json')
+        logger.info(f'"{mat_to_delete}" does not exist in '
+                    f'"{Path(lib_file).stem}". Nothing Deleted. Check '
+                    f'Spelling.')

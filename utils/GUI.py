@@ -1,6 +1,16 @@
 import PySimpleGUI as Sg
 from utils.material_lib import load_material_lib
 import os
+import ctypes
+import platform
+
+
+def make_dpi_aware():
+    if int(platform.release()) >= 8:
+        ctypes.windll.shcore.SetProcessDpiAwareness(True)
+
+
+make_dpi_aware()
 
 
 def gui_single_file():
@@ -101,7 +111,7 @@ def gui_single_file():
     return float(m_bs), float(r_bs), float(ge_bs), file_path, material, k_t
 
 
-def call_gui() -> (bool, float, float, float, str, str, str):
+def call_gui() -> (bool, float, float, float, str, str, str, bool, float):
     """
     This is a user interface which allows for
      1. selecting the type of analysis: single IMU files or multiple IMU files.
@@ -116,16 +126,16 @@ def call_gui() -> (bool, float, float, float, str, str, str):
         6. the material selected for stress evaluation (Minor's rule)
         7. configuration of the material the Kt value is based on for stress
            evaluation (Minor's rule)
+        8. whether to filter the input data or not
+        9. if 8 is True, the minimum amplitude which will remain intact
+           during filtration
 
     """
 
     # initial default values
-    current_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),
-                                               '..\\data'))
-    current_file = os.path.abspath(
-        os.path.join(os.path.dirname(__file__),
-                     '..\\data'
-                     '\\Monday November 15, 2021 01-04 PM.dat'))
+    current_dir = 'C:\\Users\\pooya.rowghanian\\Desktop\\New Folder'
+    current_file = 'C:\\Users\\pooya.rowghanian\\Desktop\\New Folder\\' \
+                   'Wednesday November 10, 2021 12-33 PM.dat'
 
     # location of logo
     logo_file = os.path.join(os.path.dirname(__file__),
@@ -207,7 +217,12 @@ def call_gui() -> (bool, float, float, float, str, str, str):
                   key='-MATERIAL-', readonly=True, enable_events=True)],
         [Sg.Combo(values=list(mat_lib[materials[0]].keys()),
                   default_value=list(mat_lib[materials[0]].keys())[1],
-                  size=(30, 1), key='-KT-', readonly=True)]
+                  size=(30, 1), key='-KT-', readonly=True)],
+        [Sg.CB('Apply Racetrack Filter on Raw Data', default=True,
+               key='-RTF-', enable_events=True)],
+        [Sg.T('Keep Amplitudes Above', pad=((28, 0), (0, 0))),
+         Sg.I(default_text='0.10', size=(4, 1), key='-hVALUE-'), Sg.T('g')],
+        [Sg.CB('Show Labels on the Plot', key='-SL-')]
     ]
 
     layout = [
@@ -221,7 +236,7 @@ def call_gui() -> (bool, float, float, float, str, str, str):
 
     # analysis window
     wdw = Sg.Window('Damage Analysis', layout, font=('Microsoft YaHei UI', 11),
-                    return_keyboard_events=True, size=(600, 265))
+                    return_keyboard_events=True, size=(950, 520))
 
     while True:
         event, value = wdw.read()
@@ -242,6 +257,13 @@ def call_gui() -> (bool, float, float, float, str, str, str):
                 values=list(mat_lib[value['-MATERIAL-']].keys()),
                 set_to_index=0)
 
+        # when checkbox is (de)activated
+        if event == '-RTF-':
+            if not value['-RTF-']:
+                wdw['-hVALUE-'].update(disabled=True, text_color='grey')
+            else:
+                wdw['-hVALUE-'].update(disabled=False, text_color='black')
+
         # when `submit` is clicked
         if event == 'Submit':
             m_bs = value['-MBS-']
@@ -250,6 +272,9 @@ def call_gui() -> (bool, float, float, float, str, str, str):
             dir_path = value['-DIR-']
             material = value['-MATERIAL-']
             k_t = value['-KT-']
+            rt_filter = value['-RTF-']
+            h = value['-hVALUE-']
+            show_labels = value['-SL-']
 
             # when material data is not available in the library user has
             # the choice to change the material or proceed with no material
@@ -276,5 +301,6 @@ def call_gui() -> (bool, float, float, float, str, str, str):
 
     wdw.finalize()
 
-    return multiple_files, float(m_bs), float(r_bs), float(
-        ge_bs), dir_path, material, k_t
+    return multiple_files, float(m_bs), float(r_bs), \
+           float(ge_bs), dir_path, material, k_t, rt_filter, float(h), \
+           show_labels

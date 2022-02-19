@@ -235,14 +235,14 @@ def plot_signal(x: list,
         i = 0
         # t = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I']
         for x_, y_ in zip(x, y):
-            label = "{:.3f}".format(y_[0])
+            label = "{:.3f}".format(y_)
             # if y_ > 0:
             #     y_ += .25
             # else:
             #     y_ -= 1
 
             ax.annotate(label,  # this is the text
-                        (x_[0], y_[0]),  # this is the point to label
+                        (x_, y_),  # this is the point to label
                         textcoords="offset points",  # how to position the text
                         xytext=(0, 0),  # distance from text to points (x,y)
                         ha='center',

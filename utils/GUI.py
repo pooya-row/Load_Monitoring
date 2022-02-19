@@ -26,7 +26,7 @@ def gui_single_file():
 
     # Load material library
     mat_lib = load_material_lib(os.path.join(os.path.dirname(__file__),
-                                             '..\\ilb\\mat_lib.json'))
+                                             '..\\lib\\mat_lib.json'))
     materials = list(mat_lib.keys())
 
     left_column = [
@@ -41,8 +41,8 @@ def gui_single_file():
     right_column = [
         [Sg.I(default_text=current_path, size=(30, 1), key='-FILE-'),
          Sg.FileBrowse(font=('Microsoft YaHei UI', 9))],
-        [Sg.I(default_text='0.25', size=(30, 1), key='-MBS-')],
-        [Sg.I(default_text='0.25', size=(30, 1), key='-RBS-')],
+        [Sg.I(default_text='0.5', size=(30, 1), key='-MBS-')],
+        [Sg.I(default_text='1.', size=(30, 1), key='-RBS-')],
         [Sg.I(default_text='0.1', size=(30, 1), key='-gRES-')],
         [Sg.Combo(values=materials, default_value=materials[0], size=(30, 1),
                   key='-MATERIAL-', readonly=True, enable_events=True)],

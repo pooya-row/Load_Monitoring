@@ -26,7 +26,7 @@ def property_selector(material: str, k_t: str) -> list:
     # par_dir = os.path.abspath(os.path.join(os.getcwd(), os.pardir))
     # mat_file = os.path.join(os.getcwd(), '../lib/mat_lib.json')
     mat_lib = load_material_lib('C:\\Users\\pooya.rowghanian\\Documents\\'
-                                '02.Python\\Rainflow\\mat_lib.json')
+                                '02.Python\\LoadMonitoring\\lib\\mat_lib.json')
     # mat_lib = load_material_lib(mat_file)
     return mat_lib[material][k_t]
 

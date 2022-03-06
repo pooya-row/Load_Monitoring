@@ -2,7 +2,7 @@ data/
 WIP/
 .idea
 Initial Data/
-utils/__pycache__
+*.pyc
 utils/get_data_pd.py
 utils/RF_analysis.py
 archive/ASTM_example.sublime-project

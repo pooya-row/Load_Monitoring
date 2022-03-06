@@ -7,7 +7,7 @@ import platform
 
 def make_dpi_aware():
     if int(platform.release()) >= 8:
-        ctypes.windll.shcore.SetProcessDpiAwareness(True)
+        ctypes.windll.shcore.SetProcessDpiAwareness(2)
 
 
 make_dpi_aware()
@@ -236,13 +236,13 @@ def call_gui() -> (bool, float, float, float, str, str, str, bool, float):
 
     # analysis window
     wdw = Sg.Window('Damage Analysis', layout, font=('Microsoft YaHei UI', 11),
-                    return_keyboard_events=True, size=(950, 520))
+                    return_keyboard_events=True)#, size=(950, 520))
 
     while True:
         event, value = wdw.read()
 
         # termination by user
-        if event in ['Cancel', 'Escape:27']:
+        if event in ['Cancel', 'Escape:27', Sg.WIN_CLOSED]:
             print('Interrupted by the user.')
             exit()
 
